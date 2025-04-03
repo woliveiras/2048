@@ -1,8 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TileState", menuName = "Tile State", order = 0)]
+[CreateAssetMenu(menuName = "Tile State")]
 public class TileState : ScriptableObject
 {
+  public int number;
   public Color backgroundColor;
   public Color textColor;
 }
