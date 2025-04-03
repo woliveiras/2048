@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileBoard : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private TileState[] tileStates;
 
