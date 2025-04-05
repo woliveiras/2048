@@ -12,6 +12,9 @@ public class TileBoard : MonoBehaviour
     private List<Tile> tiles;
     private bool waiting;
 
+    private Vector2 startTouchPosition;
+    private Vector2 endTouchPosition;
+
     private void Awake()
     {
         grid = GetComponentInChildren<TileGrid>();
@@ -45,6 +48,33 @@ public class TileBoard : MonoBehaviour
     {
         if (waiting) return;
 
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            startTouchPosition = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            endTouchPosition = Input.mousePosition;
+            HandleSwipe(startTouchPosition, endTouchPosition);
+        }
+
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                startTouchPosition = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                endTouchPosition = touch.position;
+                HandleSwipe(startTouchPosition, endTouchPosition);
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             Move(Vector2Int.up, 0, 1, 1, 1);
@@ -60,6 +90,40 @@ public class TileBoard : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             Move(Vector2Int.right, grid.Width - 2, -1, 0, 1);
+        }
+    }
+
+    private void HandleSwipe(Vector2 start, Vector2 end)
+    {
+        Vector2 swipe = end - start;
+
+
+        if (swipe.magnitude < 50) return;
+
+
+        if (Mathf.Abs(swipe.x) > Mathf.Abs(swipe.y))
+        {
+
+            if (swipe.x > 0)
+            {
+                Move(Vector2Int.right, grid.Width - 2, -1, 0, 1);
+            }
+            else
+            {
+                Move(Vector2Int.left, 1, 1, 0, 1);
+            }
+        }
+        else
+        {
+
+            if (swipe.y > 0)
+            {
+                Move(Vector2Int.up, 0, 1, 1, 1);
+            }
+            else
+            {
+                Move(Vector2Int.down, 0, 1, grid.Height - 2, -1);
+            }
         }
     }
 
