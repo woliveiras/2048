@@ -69,14 +69,16 @@ public class Tile : MonoBehaviour
   private IEnumerator Animate(Vector3 to, bool merging)
   {
     float elapsed = 0f;
-    float duration = 0.1f;
+    float duration = 0.05f;
 
     Vector3 from = transform.position;
 
     while (elapsed < duration)
     {
-      transform.position = Vector3.Lerp(from, to, elapsed / duration);
       elapsed += Time.deltaTime;
+      float t = Mathf.Clamp01(elapsed / duration);
+      transform.position = Vector3.Lerp(from, to, t);
+
       yield return null;
     }
 
